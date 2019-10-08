@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, viewport-fit=cover">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/lib/fontawesome-free/css/all.min.css">
+        <link rel="stylesheet" type="text/css" href="css/lib/jquery.chatbubble.min.css">
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/lib/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="js/lib/firebase.min.js"></script>
+        <script type="text/javascript" src="js/firebase_init.js"></script>
+        <script type="text/javascript" src="js/helpers.js"></script>
+        <script type="text/javascript" src="js/AnimationGroup.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <title>AdoptED: Walking in Her Shoes</title>
+
+        <script id="landing_page" type="text/template">
+            <div class="bg-orange">
+                <div class="grid">
+                    <img src="assets/img/AdoptEd-Primary-White.png" class="logo">
+                    <div class="textbox">
+                        <h1>Walking in Her Shoes</h1>
+                        <p>An interactive educational tool of life and choices from AdoptED presented by the Gladney Center for Adoption</p>
+                    </div>
+                </div>
+                <div class="footer">
+                    <div class="grid">
+                        <div class="item-a">Chat with a Pregnancy Hotline counselor now:</div>
+                        <div class="item-quote">
+                            <div class="speech-bubble-right">
+                                <h5>Hi, I'm Gabby!<br /> Follow me to <br /><a href="#" id="toIntroVideo" class="underline bigger">get started!</a></h5>
+                            </div>
+                        </div>
+                        <div class="item-img">
+                            <img id="gabbyLandingPage" src="assets/img/gabby2.svg" alt="Gabby">
+                        </div>
+                        <button id="smsLink" class="item-c"><span class="shift-left"><i class="fas fa-comment"></i>   Text Gladney</span></button>
+                        <button id="webLink" class="item-d"><i class="fas fa-desktop"></i> Visit our Website</button>
+                    </div>
+                </div>
+            </div>
+            <!--<embed src="assets/sounds/My_Shoes.mp3" width="180" height="90" loop="true" autostart="true" hidden="true" />-->
+        </script>
+        <script id="video" type="text/template">
+            <div class="bg-blue video-wrap">
+                <img id="toNextSlide" src="assets/img/video-placeholder.svg" class="logo">
+                <h2>Tap to Watch</h2>
+            </div>
+        </script>
+        <script id="video_player" type="text/template">
+            <div class="video-container">
+                <video controls autoplay>
+                    <source src="assets/videos/01-gabby-background.mp4" type="video/mp4">
+                </video>
+            </div>
+        </script>
+        <script id="video_player2" type="text/template">
+            <div class="video-container">
+                <video controls autoplay>
+                    <source src="assets/videos/02-doctor.mp4" type="video/mp4">
+                </video>
+            </div>
+        </script>
+        <script id="video_player3" type="text/template">
+            <div class="video-container">
+                <video controls autoplay>
+                    <source src="assets/videos/03-types-adoption.mp4" type="video/mp4">
+                </video>
+            </div>
+        </script>
+        <script id="video_player4" type="text/template">
+            <div class="video-container">
+                <video controls autoplay>
+                    <source src="assets/videos/04-ap-backstories.mp4" type="video/mp4">
+                </video>
+            </div>
+        </script>
+        <script id="video_player5" type="text/template">
+            <div class="video-container">
+                <video controls autoplay>
+                    <source src="assets/videos/05-terminating-rights.mp4" type="video/mp4">
+                </video>
+            </div>
+        </script>
+        <script id="video_player6" type="text/template">
+            <div class="video-container">
+                <video controls autoplay>
+                    <source src="assets/videos/06-aw-checkin.mp4" type="video/mp4">
+                </video>
+            </div>
+        </script>
+        <script id="video_player7" type="text/template">
+            <div class="video-container">
+                <video controls autoplay>
+                    <source src="assets/videos/06-ma-checkin.mp4" type="video/mp4">
+                </video>
+            </div>
+        </script>
+        <script id="video_player8-ma" type="text/template">
+            <div class="video-container">
+                <video controls autoplay>
+                    <source src="assets/videos/07-adopt-concl.mp4" type="video/mp4">
+                </video>
+            </div>
+        </script>
+        <script id="video_player8-ab" type="text/template">
+            <div class="video-container">
+                <video controls autoplay>
+                    <source src="assets/videos/07-adopt-concl-2.mp4" type="video/mp4">
+                </video>
+            </div>
+        </script>
+        <script id="video_player9" type="text/template">
+            <div class="video-container">
+                <video controls autoplay>
+                    <source src="assets/videos/09-parenting-concl.mp4" type="video/mp4">
+                </video>
+            </div>
+        </script>
+        <script id="intro_slide1" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad in-front">
+                    <h2>Surprise! Gabby is pregnant! How do you think she's feeling?</h2>
+                </div>
+                <div id="emotionDiv">
+                    <img id="overwhelmedImg" src="assets/img/feeling-overwhelmed.svg" class="img-full next-page">
+                    <img id="sadImg" src="assets/img/feeling-sad.svg" class="img-full next-page">
+                    <img id="happyImg" src="assets/img/feeling-happy.svg" class="img-full next-page">
+                </div>
+            </div>
+        </script>
+        <script id="intro_slide2" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Gabby tells her boyfriend, <span id="fadeInText">she is pregnant.</span></h2>
+                </div>
+                <div id="areYouSure" class="speech-bubble-right">
+                    <h5>Are you sure?</h5>
+                </div>
+                <img id="gabby1" src="assets/img/gabby1.svg">
+                <img id="boyfriend1" src="assets/img/boyfriend.svg">
+            </div>
+        </script>
+        <script id="intro_slide3" type="text/template">
+            <div class="bg-teal">
+                <div id="introSlide3Text" class="text-pad">
+                    <h2>What percentage of teen couples do you think stay together after finding out about an unplanned pregnancy?</h2>
+                </div>
+                <div class="slider-container hidden">
+                    <p>Slide to guess:</p>
+                    <div class="value">0%</div>
+                    <input type="range" min="0" max="100" step="1" value="0">
+                </div>
+                <button id="toIntroSlide4" class="next">Next</button>
+            </div>
+        </script>
+        <script id="intro_slide4" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad2 text-center">
+                    <h2 id="introSlide4Text1"> After finding out about an unplanned pregnancy only</h2>
+                    <h1 id="introSlide4Text2" class="text-huge">20%</h1>
+                    <h2 id="introSlide4Text3">of teen couples stay together.</h2>
+                </div>
+                <button id="toIntroSlide5" class="next">Next</button>
+            </div>
+        </script>
+        <script id="intro_slide5" type="text/template">
+            <div class="bg-orange">
+                <div id="phone1Container">
+                    <img id="phone1" src="assets/img/smartphone-noreflections.svg">
+                    <div id="introSlide5Bubble1" class="speech-bubble-right fade-in-right">
+                        <h5>I can't do this...</h5>
+                    </div>
+                    <div id="introSlide5Bubble2" class="speech-bubble-left fade-in">
+                        <h5>What do you mean?</h5>
+                    </div>
+                    <div id="introSlide5Bubble3" class="speech-bubble-right fade-in-right">
+                        <h5>I'm not ready to be a dad</h5>
+                    </div>
+                    <div id="introSlide5Bubble4" class="speech-bubble-left fade-in">
+                        <h5><span class="dot1">.</span><span class="dot2">.</span><span class="dot3">.</span></h5>
+                    </div>
+                    <div id="introSlide5Bubble5" class="speech-bubble-right fade-in-right">
+                        <h5>We should break up.</h5>
+                    </div>
+                </div>
+            </div>
+        </script>
+        <script id="intro_slide6" type="text/template">
+            <div class="bg-red">
+                <img id="phone2" src="assets/img/smartphone-noreflections.svg">
+                <img id="cryingEmoji" src="assets/img/crying-face-emoji.svg">
+            </div>
+        </script>
+        <script id="intro_slide7" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Gabby goes to the doctor. The doctor explains all of her options with pregnancy.</h2>
+                    <p>Watch the video to learn more about her options.</p>
+                </div>
+                <img class="stethoscope" src="assets/img/stethoscope.svg">
+                <button id="toIntroVideo2" class="next">Next</button>
+            </div>
+        </script>
+        <script id="decision_slide" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad2">
+                    <h1 id="decisionText">Help Gabby make a decision.</h1>
+                    <p>Choose a path by tapping on a sign.</p>
+                </div>
+                <img class="sign-post" src="assets/img/yellow-sign-post.svg">
+                <div class="signContainer">
+                    <div id="firstClickArea"></div>
+                    <div id="secondClickArea"></div>
+                    <p id="firstLearnMore">Learn more</p>
+                    <p id="secondLearnMore">Learn more</p>
+                    <img class="signs" src="assets/img/roadsigns-teal-both.svg">
+                </div>
+                <button id="pathSubmit" class="next">Submit</button>
+            </div>
+        </script>
+        <script id="explanation_slide" type="text/template">
+            <div class="bg-orange">
+                <div class="white-container">
+                    <div class="close-container">X Close</div>
+                    <div class="scroll-pad">
+                        <div class="text-pad">
+                            <h2>Parenting:</h2>
+                            <p>
+                                There is nothing more joyful than a new
+                                baby. Children are truly a gift and bring so
+                                much meaning and love into the lives of
+                                those who care for them. This doesn't mean
+                                that parenting is always easy. At some
+                                point, every parent faces sleepless nights,
+                                financial sacrifices, and emotional
+                                exhaustion. The amount of support you
+                                have while parenting can make a world of
+                                difference for everyone involved. Choose the
+                                parenting pathway to explore what
+                                parenting might look like - all of the joys you
+                                will experience as well as some of the
+                                common struggles that parents face.
+                            </p>
+                            <hr />
+                            <h2>Adoption:</h2>
+                            <p>
+                                By choosing adoption, you show sacrificial
+                                love for your child. Adoption is not easy.
+                                Nothing worthwhile ever is. There may be
+                                challenges, difficulties, and even grief. But
+                                you will be surrounded by love and support
+                                as you create a very personal adoption plan.
+                                You can hand-pick your adoptive parents,
+                                and even correspond with them through
+                                letters and photos as your child grows. And
+                                you'll always know that you chose the best
+                                life you could imagine for your child. Choose
+                                the Adoption pathway to learn more about
+                                the process and decisions through the
+                                journey of adoption.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <!-- Adoption Path -->
+        <script id="adoption_slide1" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>Gabby makes the brave choice to begin an adoption plan.</h1>
+                </div>
+                <img class="shiny-heart" src="assets/img/red-heart-with-reflections.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide2" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>The doctor tells her about an adoption agency to contact.</h1>
+                </div>
+                <img class="heart-gladney-logo" src="assets/img/red-heart-gladney-logo.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide3" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>Gabby feels nervous about talking on the phone to someone she doesn't know about her pregnancy,
+                        so she texts Gladney instead.</h3>
+                </div>
+                <img class="bottom-center-person" src="assets/img/gabby-baby-bump.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide4" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>They get back with her really quickly and connect her to Mariah, a Gladney caseworker.</h3>
+                </div>
+                <img class="bottom-center-person" src="assets/img/mariah-waving1.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide5" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>She is really friendly and seems to really understand what Gabby is going through.</h3>
+                </div>
+                <img class="bottom-center-person" src="assets/img/mariah-waving2.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide6" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h1>Gabby has so many questions for Mariah.</h1>
+                    <p>Help Gabby get answers by sending a text to Mariah.</p>
+                </div>
+                <div id="smartphoneContainer">
+                    <div id="smartphoneTextDots" class="speech-bubble-right fade-in-right">
+                        <h5>...</h5>
+                    </div>
+                    <img id="smartphone" src="assets/img/smartphone-noreflections.svg">
+                </div>
+                <button id="toQuestionSlide" class="next">Next</button>
+            </div>
+        </script>
+        <script id="question_slide" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad2">
+                    <p>Questions you submit may appear on the <span class="underline">AdoptED</span> website with real answers from a
+                        Gladney Caseworker. Check back on the website to see real answers.</p>
+                </div>
+                <div class="white-container container-small">
+                    <div class="scroll-pad">
+                        <div class="text-pad">
+                            <textarea placeholder="Type your question for Mariah..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <button class="next">Submit</button>
+            </div>
+        </script>
+        <script id="adoption_slide7" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>Gabby meets with Mariah at a coffee shop near her house. Mariah quickly puts her at ease.</h3>
+                </div>
+                <img class="gabby-talking-to-mariah" src="assets/img/gabby-talking-to-mariah1.svg">
+                <img class="mariah-talking-to-gabby" src="assets/img/mariah-talking-to-gabby1.svg">
+
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide8" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>Mariah tells her about the options that Gladney can offer her to make her pregnancy a little bit easier.</h3>
+                </div>
+                <img class="gabby-talking-to-mariah" src="assets/img/gabby-important-things.svg">
+                <img class="mariah-talking-to-gabby" src="assets/img/mariah-talking-to-gabby2.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide9" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad">
+                    <p>Tap any of the topics to learn more.</p>
+                </div>
+                <div class="topic-border">
+                    <div class="clipboard-clip">
+                        <div class="clipboard-line"></div>
+                    </div>
+                    <div class="topic-container">
+                        <div class="text-pad border-bottom">
+                            <h3 id="counseling">Counseling</h3>
+                            <h3 id="medicalCare">Medical Care</h3>
+                            <h3 id="financialSupport">Financial Support</h3>
+                            <h3 id="legalServices">Legal Services</h3>
+                            <h3 id="livingAtHome">Living at Home</h3>
+                            <h3 id="careerSupport">Career Support</h3>
+                            <h3 id="postAdoptionSupport">Post Adoption Support</h3>
+                        </div>
+                    </div>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="topic_explanations" type="text/template">
+            <div class="bg-red">
+                <div class="white-container">
+                    <div class="close-container">X Close</div>
+                    <div class="scroll-pad">
+                        <div class="text-pad bottom-pad">
+                            <h2 id="counselingExplanation">Counseling:</h2>
+                            <p>
+                                You can count on support and encouragement from Gladney through every step of your
+                                pregnancy and throughout your life. After the birth, Gladney's Next Steps program helps
+                                you imagine your future and set goals through career counseling, budget coaching, and
+                                educational opportunities. You can always update your medical records through Gladney
+                                and take advantage of one-on-one counseling and support groups, when needed. Counseling
+                                and support also are available for key people in your life, such as family members and
+                                the baby's father. The "Family Loving Decisions" workshop helps family members learn
+                                about the adoption process and how to support a mother during pregnancy and after placement.
+
+                            </p>
+                            <hr />
+                            <h2 id="medicalCareExplanation">Medical Care</h2>
+                            <p>
+                                You can use your own doctor or one provided by Gladney. We will help you coordinate
+                                visits. You will have access to such health services as prenatal visits, sonograms, and childbirth classes. Gladney also can
+                                assist with Medicaid applications.
+                            </p>
+                            <hr />
+                            <h2 id="financialSupportExplanation">Financial Support</h2>
+                            <p>
+                                Trying to figure out how to pay for doctor visits and housing while you're pregnant is
+                                probably one of your top concerns. While pregnant and making an adoption plan, Gladney
+                                can offer you financial assistance to cover pregnancy-related expenses. Every state has
+                                laws that regulate the amount and type of financial assistance that can be given. Most states will allow Gladney to help you with living expenses
+                                (phone, rent, maternity clothes, food, utilities) as well as medical and legal expenses.
+                            </p>
+                            <hr />
+                            <h2 id="legalServicesExplanation">Legal Services</h2>
+                            <p>
+                                Legal expenses will cover the cost of adoption attorney fees and court fees. Our
+                                outstanding legal services oversee your legal process to ensure your requests are met.
+                            </p>
+                            <hr />
+                            <h2 id="livingAtHomeExplanation">Living at Home</h2>
+                            <ul>
+                                <li>Determine your eligibility for financial assistance</li>
+                                <li>Schedule and arrange doctor and hospital visits</li>
+                                <li>Coordinate free legal services for the adoption</li>
+                                <li>Connect you with others who've chosen adoption for their children (so you can hear
+                                    about their stories and experiences)</li>
+                            </ul>
+                            <hr />
+                            <h2 id="careerSupportExplanation">Career Support</h2>
+                            <p>
+                                Gladney can help further your education through an
+                                individualized plan designed to help you meet your career goals. Many birth moms take
+                                advantage of training classes at the local community college. Your options counselor is
+                                available to help you create a plan and suggest ways to achieve your career goals.
+                            </p>
+                            <hr />
+                            <h2 id="postAdoptionSupportExplanation">Post Adoption Support</h2>
+                            <p>
+                                Gladney offers lifetime support to mothers who've made adoption plans.
+                                Contact Post Adoption at
+                                <a href="mailto:postad@gladney.org" target="_system" class="plain-link">postad@gladney.org</a>
+                                , or call
+                                <a href="tel:18004523639" target="_system" class="plain-link">817-922-6085</a>
+                                for more information about dates and times of support groups.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+        <script id="adoption_slide10" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Mariah explains the different types of adoptions that gabby can choose from.</h2>
+                </div>
+                <img class="bottom-center-person" src="assets/img/mariah-explains-types-of-adoption.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide11" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>Open.</h1>
+                    <h1>Semi-open.</h1>
+                    <h1>Closed.</h1>
+                    <p>Watch the video to learn more.</p>
+                </div>
+                <img class="bottom-center-person" src="assets/img/mariah-explains-types-of-adoption.svg">
+                <button id="video3" class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide12" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad2">
+                    <h1>Gabby chooses a semi-open adoption.</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide13" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>This way, she will still get updates on her child and have contact with the family.</h3>
+                </div>
+                <img class="gabby-thinking" src="assets/img/gabby-thinking-letters-polaroid.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide14" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>It's time for Gabby to start choosing the adoptive parents for her baby. It's a big decision.</h3>
+                </div>
+                <img class="gabby-talking-to-mariah" src="assets/img/gabby-talking-to-mariah2.svg">
+                <img class="mariah-talking-to-gabby" src="assets/img/mariah-talking-to-gabby2.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide15" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>Mariah encourages Gabby to think through some things that are really important to her when trying to find the right family.</h3>
+                </div>
+                <img class="gabby-talking-to-mariah" src="assets/img/gabby-important-things.svg">
+                <img class="mariah-talking-to-gabby" src="assets/img/mariah-talking-to-gabby2.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide16" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h2 class="text-center">Family Dynamic</h2>
+                    <p class="text-center">(Select One)</p>
+                </div>
+                <div class="white-grid-container-small">
+                    <div class="grid-item base" data-tag="Only child"><img src="assets/img/familydynamic-only-child.svg"></div>
+                    <div class="grid-item base" data-tag="Has siblings"><img src="assets/img/familydynamic.svg"></div>
+                    <div class="grid-item base" data-tag="Has extended family"><img src="assets/img/familydynamic-extended-family.svg"></div>
+                </div>
+                <button class="next hidden">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide17" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h2 class="text-center">Interests</h2>
+                    <p class="text-center">(Select up to 9)</p>
+                </div>
+                <div class="white-grid-container">
+                    <div class="grid-item" data-tag="Music"><img src="assets/img/interests-music.svg"></div>
+                    <div class="grid-item" data-tag="Sports"><img src="assets/img/interests-sports.svg"></div>
+                    <div class="grid-item" data-tag="Reading"><img src="assets/img/interests-reading.svg"></div>
+                    <div class="grid-item" data-tag="Science"><img src="assets/img/interests-science.svg"></div>
+                    <div class="grid-item" data-tag="Nature/Outdoors"><img src="assets/img/interests-nature-outdoors.svg"></div>
+                    <div class="grid-item" data-tag="Movies"><img src="assets/img/interests-movies.svg"></div>
+                    <div class="grid-item" data-tag="Pets"><img src="assets/img/interests-pets.svg"></div>
+                    <div class="grid-item" data-tag="Religion"><img src="assets/img/interests-religion.svg"></div>
+                    <div class="grid-item" data-tag="Camping"><img src="assets/img/interests-camping.svg"></div>
+                    <div class="grid-item" data-tag="Travel"><img src="assets/img/interests-travel.svg"></div>
+                    <div class="grid-item" data-tag="Cooking"><img src="assets/img/interests-cooking.svg"></div>
+                    <div class="grid-item" data-tag="Art"><img src="assets/img/interests-art.svg"></div>
+                </div>
+                <button class="next hidden">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide18" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h2 class="text-center">Home Style</h2>
+                    <p class="text-center">(Select One)</p>
+                </div>
+                <div class="white-grid-container-medium">
+                    <div class="grid-item" data-tag="Condo"><img src="assets/img/home-condo.svg"></div>
+                    <div class="grid-item" data-tag="Moderate sized"><img src="assets/img/home-moderatesized.svg"></div>
+                    <div class="grid-item" data-tag="Modern style home"><img src="assets/img/home-modern.svg"></div>
+                    <div class="grid-item" data-tag="Farmhouse"><img src="assets/img/home-farmhouse.svg"></div>
+                    <div class="grid-item" data-tag="High rise apartment"><img src="assets/img/home-highrise.svg"></div>
+                    <div class="grid-item"></div>
+
+                </div>
+                <button class="next hidden">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide19" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h2 class="text-center">Location</h2>
+                    <p class="text-center">(Select One)</p>
+                </div>
+                <div class="white-grid-container-medium">
+                    <div class="grid-item" data-tag="Suburban"><img src="assets/img/location-suburban.svg"></div>
+                    <div class="grid-item" data-tag="City"><img src="assets/img/location-city.svg"></div>
+                    <div class="grid-item" data-tag="Coastal"><img src="assets/img/location-coastal.svg"></div>
+                    <div class="grid-item" data-tag="Mountains"><img src="assets/img/location-mountains.svg"></div>
+                    <div class="grid-item" data-tag="Rural"><img src="assets/img/location-rural.svg"></div>
+                    <div class="grid-item"></div>
+                </div>
+                <button class="next hidden">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide20" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h2 class="text-center">Your Choices</h2>
+                    <p class="text-center">Here are the characteristics you selected for an ideal family.</p>
+                </div>
+                <div class="white-grid-container">
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide21" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>Gabby looks through adoptive parent profile books to find the perfect match for her child.</h3>
+                    <p>Watch the video to learn more about her options.</p>
+                </div>
+                <img class="bottom-center-person" src="assets/img/gabby-smiling-looking-down.svg">
+                <button id="video4" class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide23" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad">
+                    <h2><span class="ap-names"></span> are so grateful for Gabby's decision.</h2>
+                </div>
+                <img class="bottom-center-person" src="">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide24" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2 id="adoptionSlide24Text1">Mariah goes with gabby to her next doctor's appointment.</h2>
+                    <h2 id="adoptionSlide24Text2">The doctor encourages gabby to make a plan for when she gives birth.</h2>
+                </div>
+                <img class="stethoscope" src="assets/img/stethoscope.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide25" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h1>Help Gabby make a decision.</h1>
+                </div>
+                <img class="bottom-left-person" src="assets/img/gabby-thinking.svg">
+                <div id="deliveryContainer">
+                    <img id="deliveryDecisionMedicated" src="assets/img/delivery-decision-medicated-nostroke.svg">
+                    <img id="deliveryDecisionNatural" src="assets/img/delivery-decision-natural-nostroke.svg">
+                </div>
+                <button class="next hidden">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide26" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad relative">
+                    <h3>Gabby is getting nervous about giving birth and placement day.
+                        She really wants her baby to have something special from her.</h3>
+                    <div class="two-choice-container">
+                        <img id="thoughtBubble" src="assets/img/container-thought-bubble-emotion.svg">
+                        <img id="nervousEmoji" src="assets/img/emoji-nervous.svg">
+                    </div>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide27" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h2>Help Gabby choose a gift to bring to the hospital.</h2>
+                </div>
+                <div class="three-choice-container">
+                    <img id="stuffedAnimal" src="assets/img/hospitalitem-stuffed-animal-nostroke.svg">
+                    <img id="blanket" src="assets/img/hospitalitem-blanket-nostroke.svg">
+                    <img id="scrapbook" src="assets/img/hospitalitem-scrapbook-nostroke.svg">
+                </div>
+                <button class="next hidden">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide28" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>Gabby goes into labor!</h1>
+                </div>
+                <img class="bottom-center-person-large" src="assets/img/gabby-in-labor-withaccentlines.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide29" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>Mariah meets her at the hospital and is with her the whole time.</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide30" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad text-center text-pad-top">
+                    <h2>Congratulations!</h2>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide31" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad2 text-center">
+                    <h1>It's a girl!</h1>
+                </div>
+                <img class="center-person" src="assets/img/baby-girl.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide32" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h1><span class="ap-names"></span> want Gabby's help to name the baby.</h1>
+                </div>
+                <img class="footprints" src="assets/img/footprints-navy.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide33" type="text/template">
+            <div class="bg-orange">
+                <div id="birthCertificate">
+                    <img src="assets/img/certificate-of-birth.svg">
+                    <select id="babyNameDropdown">
+                        <option value = "" disabled selected>Select Name</option>
+                    </select>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide34" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>After 48 hours, Gabby signs the legal documents terminating parental rights.</h2>
+                    <p>To learn more about this process, watch the following video.</p>
+                </div>
+                <img class="bottom-center-small" src="assets/img/legal-documents.svg">
+                <button id="video5" class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide35" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad2">
+                    <h2>This is such a hard day, but Gabby feels she has made the best decision for herself and her baby.</h2>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide36" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Gabby focuses on seeing <span class="ap-names"></span>'s faces light up as they hold baby <span class="baby-name text-red"></span> in their arms.</h2>
+                </div>
+                <div class="bottom-center-person">
+                    <img id="gabbyPlacement" src="assets/img/gabby-placement.svg">
+                    <img id="apPlacement" src="">
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide37" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>It's been a week since placement day and Gabby is feeling really sad.</h2>
+                </div>
+                <img class="bottom-center-person" src="assets/img/gabby-feeling-sad.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide38" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad2">
+                    <h1>She calls <br>Mariah to <br>meet up.</h1>
+                </div>
+                <img class="bottom-center-small" id="smartphoneMariah" src="assets/img/smartphone-calling-mariah.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide39" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad2">
+                    <h1>They meet up for ice cream.</h1>
+                </div>
+                <img class="bottom-center-small shop" src="assets/img/ice-cream-shop.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide40" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>Mariah talks to Gabby about the post-adoption support Gladney offers. She reminds gabby that...</h3>
+                </div>
+                <img class="gabby-talking-to-mariah" src="assets/img/gabby-talking-to-mariah.svg">
+                <img class="mariah-talking-to-gabby" src="assets/img/mariah-talking-to-gabby1.svg">
+
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide41" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad text-center">
+                    <h1>She is not alone, and good things can come from this.</h1>
+                </div>
+                <img class="shiny-heart" src="assets/img/red-heart-with-reflections.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide42" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad">
+                    <p>Tap any of the topics to learn more.</p>
+                </div>
+                <div class="topic-border">
+                    <div class="clipboard-clip">
+                        <div class="clipboard-line"></div>
+                    </div>
+                    <div class="topic-container">
+                        <div class="text-pad border-bottom">
+                            <h3 id="nextStepsProg">Gladney's Next Steps Program</h3>
+                            <h3 id="counselingServ">Counseling Services</h3>
+                            <h3 id="supportGroups">Support Groups</h3>
+                        </div>
+                    </div>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="support_explanations" type="text/template">
+            <div class="bg-red">
+                <div class="white-container">
+                    <div class="close-container">X Close</div>
+                    <div class="scroll-pad">
+                        <div class="text-pad bottom-pad">
+                            <h2 id="nextStepsProgExpl">Next Steps:</h2>
+                            <p>
+                                This program is all about helping expectant mothers make a plan for their life after pregnancy. Some of the services include:
+                                <ul>
+                                    <li>Career and job ooaching</li>
+                                    <li>Assistance with housing search</li>
+                                    <li>Advice on budgeting</li>
+                                </ul>
+                            </p>
+                            <hr />
+                            <h2 id="counselingServExpl">Counseling:</h2>
+                            <p>
+                                Gladney provides helpful counseling to help clients understand their feelings and equip them with ways to handle their feelings.
+                            </p>
+                            <hr />
+                            <h2 id="supportGroupsExpl">Support Group:</h2>
+                            <p>
+                                Support groups are a great way to connect with others who have chosen a similar path.
+                                The great thing about support groups is they can be in person or online - whatever is best and most convenient for the client.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+        <script id="adoption_slide43" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h2>Help Gabby decide where to start getting support.</h2>
+                </div>
+                <div id="supportContainer">
+                    <img id="nextStepsChoice" src="assets/img/option-support-nextsteps-nostroke.svg">
+                    <img id="counselingChoice" src="assets/img/option-support-counseling-nostroke.svg">
+                    <img id="supportGroupChoice" src="assets/img/option-support-supportgroup-nostroke.svg">
+                </div>
+                <button id="toSupportChoice" class="hidden next">Next</button>
+            </div>
+        </script>
+        <script id="support_choice1" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad">
+                    <h2>Gabby begins career counseling to explore her options after High School.</h2>
+                </div>
+                <img class="bottom-center-small" src="assets/img/diploma.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="support_choice2" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad">
+                    <h3>Gabby sets up weekly meetings with a counselor specializing in post-adoption-support.</h3>
+                </div>
+                <img class="bottom-center-small" src="assets/img/meeting-up-with-counselor.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="support_choice3" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad">
+                    <h3>Gabby meets up with a support group at the zoo. The group is filled with
+                        other birth mothers who understand what she went through.</h3>
+                </div>
+                <img class="bottom-center-small" src="assets/img/support-group-hand-holding-heart.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide44" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>It's time for Gabby to go back to school for her senior year.</h2>
+                </div>
+                <img class="bottom-center-small" src="assets/img/stack-of-books-back-to-school.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide45" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>Her friends are asking questions and can't believe she placed her child for adoption.</h3>
+                    <p>Watch the video to see how she responds.</p>
+                </div>
+                <div id="questionBubbleContainer">
+                    <img id="bubble1" src="assets/img/question-bubble-1.svg">
+                    <img id="bubble2" src="assets/img/question-bubble-2.svg">
+                    <img id="bubble3" src="assets/img/question-bubble-3.svg">
+                    <img id="bubble4" src="assets/img/question-bubble-4.svg">
+                    <img id="bubble5" src="assets/img/question-bubble-5.svg">
+                    <img id="bubble6" src="assets/img/question-bubble-1.svg">
+                    <img id="bubble7" src="assets/img/question-bubble-2.svg">
+                    <img id="bubble8" src="assets/img/question-bubble-3.svg">
+                    <img id="bubble9" src="assets/img/question-bubble-4.svg">
+                    <img id="bubble10" src="assets/img/question-bubble-5.svg">
+                </div>
+                <button id="video6" class="next">Next</button>
+            </div>
+        </script>
+        <script id="question_slide1" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad2">
+                    <div class="speech-bubble-bottom">
+                        <h2>Why'd you give up your baby?</h2>
+                    </div>
+                    <div class="question-bubble-1">
+                        <h4>She deserves more than I can give. A complete and loving family.</h4>
+                    </div>
+                    <div class="question-bubble-2">
+                        <h4>I want to focus on a career. I will cure cancer one day!</h4>
+                    </div>
+                    <div class="question-bubble-3">
+                        <h4>I can't get stuck in this town. I want to travel the world.</h4>
+                    </div>
+                </div>
+            </div>
+        </script>
+        <script id="question_slide2" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad2">
+                    <div class="speech-bubble-bottom">
+                        <h2>How do you know they will be good parents?</h2>
+                    </div>
+                    <div class="question-bubble-1">
+                        <h4>Gladney is great at making sure my child will receive a safe and loving home.</h4>
+                    </div>
+                    <div class="question-bubble-2">
+                        <h4>There was a lot of potential parents whose profiles I looked through and these were my favorite.</h4>
+                    </div>
+                    <div class="question-bubble-3">
+                        <h4>They seemed like really nice people. We met in person and got to know each other really well.</h4>
+                    </div>
+                </div>
+            </div>
+        </script>
+        <script id="question_slide3" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad2">
+                    <div class="speech-bubble-bottom">
+                        <h2>Are you going to be sad not seeing your baby?</h2>
+                    </div>
+                    <div class="question-bubble-1">
+                        <h4>The adoptive parents send me pictures and updates.</h4>
+                    </div>
+                    <div class="question-bubble-2">
+                        <h4>The adoptive parents and I have agreed to meet together once a year.</h4>
+                    </div>
+                    <div class="question-bubble-3">
+                        <h4>I know that I did the best thing for my baby.</h4>
+                    </div>
+                </div>
+            </div>
+        </script>
+        <script id="adoption_slide46" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>With the support Gabby has gotten from Gladney, she feels confident talking about her decision.</h2>
+                </div>
+                <img class="heart-gladney-logo" src="assets/img/red-heart-gladney-logo.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide47" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Because Gabby chose a semi-open adoption, she is able to show her friends pictures of baby
+                        <span class="baby-name text-red"></span> and her adoptive family.</h2>
+                </div>
+                <img id="polaroid1" src="assets/img/baby-polaroid-1.svg">
+                <img id="polaroid2" src="assets/img/baby-polaroid-2.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide48" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>It's <span class="baby-name text-red"></span> first birthday!</h1>
+                </div>
+                <div class="party-container">
+                    <img id="balloons" src="assets/img/first-birthday-balloons.svg">
+                    <img id="confetti1" src="assets/img/first-birthday-confetti-1.svg">
+                    <img id="confetti2" src="assets/img/first-birthday-confetti-2.svg">
+                    <img id="partyHat" src="assets/img/first-birthday-party-hat.svg">
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide49" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>Things are going well at school and Gabby is making good grades, but she's sad and can't
+                        stop thinking about baby <span class="baby-name text-red"></span> today.</h3>
+                </div>
+                <img class="bottom-center-person" src="assets/img/gabby-skinny-sad.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide50" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>Gabby goes out with friends from her Birth Mother Support group to celebrate baby <span class="baby-name text-red"></span> birthday.</h3>
+                </div>
+                <img class="bottom-center-small shop" src="assets/img/pizza-place.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide51" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>When she gets home, Gabby sees she has an email with a check-in video of baby <span class="baby-name text-red"></span>.</h2>
+                </div>
+                <img class="bottom-center-small" src="assets/img/email-check-in-video.svg">
+                <button id="video7" class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide52" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad2">
+                    <h1>It's graduation day!</h1>
+                </div>
+                <img class="grad-cap" src="assets/img/graduation-cap.svg">
+                <img class="diploma" src="assets/img/diploma2.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide53" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Gabby is excited she was able to graduate with all of her friends.</h2>
+                </div>
+                <img class="bottom-center-person" src="assets/img/gabby-wearing-graduation-cap-82.svg">
+                <button id="toEducationPaths" class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide54" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad2">
+                    <h1>Gabby decides <span id="educationPath"></span> is the best next step.</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide55" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h2>Help Gabby choose which <span id="educationPath2"></span> path to take:</h2>
+                </div>
+                <div class="four-choice-container">
+                    <img id="option1" src="">
+                    <img id="option2" src="">
+                    <img id="option3" src="">
+                    <img id="option4" src="">
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide56" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Gabby is working hard to finish up school.</h2>
+                </div>
+                <img class="bottom-center-person" src="assets/img/gabby-holding-books.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide57" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>She gets a letter from the adoptive parents.</h1>
+                </div>
+                <img class="bottom-center-person" src="assets/img/gabby-receiving-update.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide58" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>They just got back from vacation!</h2>
+                </div>
+                <img class="bottom-center-small shop top" src="assets/img/vacation-update-envelope.svg">
+                <img class="bottom-center-small shop bottom" src="assets/img/vacation-update-polaroid.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide59" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>Gabby graduates from school!</h1>
+                </div>
+                <img class="grad-cap" src="assets/img/graduation-cap.svg">
+                <img class="diploma" src="assets/img/diploma2.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide60" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>With friends and family, she reflects and celebrates all the
+                        accomplishments and decisions she has made to get her where she is today.</h3>
+                </div>
+                <img class="bottom-center-person" src="assets/img/gabby-graduation-cap-with-confetti.svg">
+                <button id="video8" class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide61" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h1>The truth is: <br>no decision is easy when faced with an unplanned pregnancy.</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="adoption_slide62" type="text/template">
+            <div class="bg-orange enlarged">
+                <button id="startOver" class="item-c"><i class="fas fa-undo-alt"></i></button>
+                <div class="text-pad text-pad-top text-center">
+                    <p>Chat with a Pregnancy Hotline counselor now:</p>
+                </div>
+                <button id="webLink2" class="item-d"><i class="fas fa-desktop"></i>  Visit our Website</button>
+                <button id="phoneLink2" class="item-c"><i class="fas fa-phone"></i> 1-800-Gladney</button>
+				<button id="smsLink2" class="item-c"><i class="fas fa-comment"></i>   Text Gladney</button>
+                <img id="logo" src="assets/img/adopted-gladney-logo-horizontal.svg">
+            </div>
+        </script>
+
+        <!-- Parenting Path -->
+        <script id="parenting_slide1" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Gabby decides parenting is the best decision for her and her baby.</h2>
+                </div>
+                <img class="shiny-heart" src="assets/img/red-heart-with-reflections.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide2" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>The doctor gives her pre-natal vitamins to start taking and a list of parenting classes she can sign up for.</h2>
+                </div>
+                <img class="stethoscope" src="assets/img/stethoscope.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide3" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad2 text-center">
+                    <p>What kinds of things would you need to learn about before caring for a baby?</p>
+                </div>
+                <div class="white-container container-small">
+                    <div class="scroll-pad">
+                        <div class="text-pad">
+                            <textarea placeholder="Type your thoughts..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <button class="next">Submit</button>
+            </div>
+        </script>
+        <script id="parenting_slide4" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Gabby starts to make a list of things she needs for her baby.</h2>
+                </div>
+                <div class="thought-bubble-container">
+                    <button class="tiny-bubble1 hidden"></button>
+                    <button class="tiny-bubble2 hidden"></button>
+                    <button class="tiny-bubble3 hidden"></button>
+                    <img class="thought-portion1 tiny-thought hidden" src="assets/img/thought-pacifier.svg">
+                    <img class="thought-portion2 tiny-thought hidden" src="assets/img/thought-diaper.svg">
+                    <img class="thought-portion3 tiny-thought hidden" src="assets/img/thought-mobile.svg">
+                    <img class="thought-portion4 tiny-thought hidden" src="assets/img/thought-clothes.svg">
+                    <img class="thought-portion5 tiny-thought hidden" src="assets/img/thought-crib.svg">
+                    <img class="thought-portion6 tiny-thought hidden" src="assets/img/thought-bottle.svg">
+                    <img class="thought hidden" src="assets/img/thought-bubble-blank-notail.svg">
+                    <img class="gabby-thought" src="assets/img/gabby-thinking.svg">
+                </div>
+                <button class="next hidden">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide5" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad text-pad-top-small">
+                    <h4 class="text-center">Help Gabby decide what items she needs:</h4>
+                    <p class="text-center">(Select up to 12)</p>
+                </div>
+                <div class="white-grid-container-big">
+                    <div class="grid-item" data-tag="Clothes"><img src="assets/img/item-clothes.svg"></div>
+                    <div class="grid-item" data-tag="Pacifiers"><img src="assets/img/item-pacifiers.svg"></div>
+                    <div class="grid-item" data-tag="Breast Pump"><img src="assets/img/item-breast-pump.svg"></div>
+                    <div class="grid-item" data-tag="Bottles"><img src="assets/img/item-bottles.svg"></div>
+                    <div class="grid-item" data-tag="Baby Food"><img src="assets/img/item-baby-food.svg"></div>
+                    <div class="grid-item" data-tag="High Chair"><img src="assets/img/item-highchair.svg"></div>
+                    <div class="grid-item" data-tag="Baby Monitor"><img src="assets/img/item-baby-monitor.svg"></div>
+                    <div class="grid-item" data-tag="Blankets"><img src="assets/img/item-blankets.svg"></div>
+                    <div class="grid-item" data-tag="Diaper Bag"><img src="assets/img/item-diaper-bag.svg"></div>
+                    <div class="grid-item" data-tag="Car Seat"><img src="assets/img/item-car-seat.svg"></div>
+                    <div class="grid-item" data-tag="Diapers"><img src="assets/img/item-diapers.svg"></div>
+                    <div class="grid-item" data-tag="Wipe Warmer"><img src="assets/img/item-wipe-warmer.svg"></div>
+                    <div class="grid-item" data-tag="Crib"><img src="assets/img/item-crib.svg"></div>
+                    <div class="grid-item" data-tag="Baby Books"><img src="assets/img/item-baby-books.svg"></div>
+                    <div class="grid-item" data-tag="Teething Rings"><img src="assets/img/item-teething-rings.svg"></div>
+                    <div class="grid-item" data-tag="Rattles"><img src="assets/img/item-rattles.svg"></div>
+                    <div class="grid-item" data-tag="Baby Shoes"><img src="assets/img/item-baby-shoes.svg"></div>
+                    <div class="grid-item" data-tag="Stuffed Animals"><img src="assets/img/item-stuffed-animals.svg"></div>
+                    <div class="grid-item" data-tag="Mobile"><img src="assets/img/item-mobile.svg"></div>
+                    <div class="grid-item" data-tag="Stroller"><img src="assets/img/item-stroller.svg"></div>
+                </div>
+                <button class="next hidden">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide6" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h2 class="text-center">Your choices:</h2>
+                </div>
+                <div class="white-grid-container">
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                    <div class="grid-item"><img src=""></div>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide8" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h3 class="text-center">Match the items to the price tag:</h3>
+                    <p class="text-center">Drag the price tag over the baby item to guess.</p>
+                </div>
+                <div class="white-grid-container price-match">
+                    <div class="grid-item" data-type="item" data-tag="60"><img src="assets/img/pricetag-item-clothes.svg"><img id="price1" class="pricetag" src="assets/img/pricetag-green-60.svg"></div>
+                    <div class="grid-item" data-type="item" data-tag="175"><img src="assets/img/pricetag-item-carseat.svg"><img id="price2" class="pricetag" src="assets/img/pricetag-green-175.svg"></div>
+                    <div class="grid-item" data-type="item" data-tag="300"><img src="assets/img/pricetag-item-crib.svg"><img id="price3" class="pricetag" src="assets/img/pricetag-green-300.svg"></div>
+                    <div class="grid-item" data-type="item" data-tag="45"><img src="assets/img/pricetag-item-diapers.svg"><img id="price4" class="pricetag" src="assets/img/pricetag-green-45.svg"></div>
+                    <div class="grid-item" data-type="item" data-tag="100"><img src="assets/img/pricetag-item-formula.svg"><img id="price5" class="pricetag" src="assets/img/pricetag-green-100.svg"></div>
+                    <div class="grid-item" data-type="item" data-tag="200"><img src="assets/img/pricetag-item-stroller.svg"><img id="price6" class="pricetag" src="assets/img/pricetag-green-200.svg"></div>
+                </div>
+                <div class="white-grid-container price-match tags">
+                    <div class="grid-item base" data-tag="100"><img src="assets/img/pricetag-white-100.svg"></div>
+                    <div class="grid-item base" data-tag="60"><img src="assets/img/pricetag-white-60.svg"></div>
+                    <div class="grid-item base" data-tag="200"><img src="assets/img/pricetag-white-200.svg"></div>
+                    <div class="grid-item base" data-tag="175"><img src="assets/img/pricetag-white-175.svg"></div>
+                    <div class="grid-item base" data-tag="75"><img src="assets/img/pricetag-white-75.svg"></div>
+                    <div class="grid-item base" data-tag="45"><img src="assets/img/pricetag-white-45.svg"></div>
+                    <div class="grid-item base" data-tag="145"><img src="assets/img/pricetag-white-145.svg"></div>
+                    <div class="grid-item base" data-tag="300"><img src="assets/img/pricetag-white-300.svg"></div>
+                </div>
+                <div id="dragContainer"></div>
+                <button class="next hidden">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide9" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Things are adding up quickly!</h2>
+                </div>
+                <img class="center-person bottom-pad" src="assets/img/pricetag-dollarsign.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide10" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>What do you think is the average cost per year for the first two years of a child's life?</h2>
+                </div>
+                <div class="slider-container">
+                    <p>Slide to guess:</p>
+                    <div class="value">$1,000</div>
+                    <input type="range" min="1000" max="10000" step="100" value="1000">
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide11" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h2>According to the U.S. Department of Agriculture, single parent households with an average before
+                        tax income of $40,000 or less will pay...</h2>
+                </div>
+            </div>
+        </script>
+        <script id="parenting_slide12" type="text/template">
+            <div class="bg-orange">
+                <audio>
+                    <source src="assets/sounds/ka-ching.mp3" type="audio/mpeg">
+                </audio>
+                <img class="receipt" src="assets/img/receipt-blank.svg">
+                <div class="receipt-text-container">
+                    <h2 class="text-center text-dark-green">Expenses</h2>
+                    <br>
+                    <div class="cost1">
+                        <h5>Housing <span class="text-red text-align-right">2,840</span></h5>
+                        <hr>
+                    </div>
+                    <div class="cost2">
+                        <h5>Food <span class="text-red text-align-right">1,400</span></h5>
+                        <hr>
+                    </div>
+                    <div class="cost3">
+                        <h5>Transportation <span class="text-red text-align-right">680</span></h5>
+                        <hr>
+                    </div>
+                    <div class="cost4">
+                        <h5>Clothing <span class="text-red text-align-right">410</span></h5>
+                        <hr>
+                    </div>
+                    <div class="cost5">
+                        <h5>Health <span class="text-red text-align-right">520</span></h5>
+                        <hr>
+                    </div>
+                    <div class="cost6">
+                        <h5>Child Care <span class="text-red text-align-right">1,400</span></h5>
+                        <hr>
+                    </div>
+                    <div class="cost7">
+                        <h5>Misc. <span class="text-red text-align-right">510</span></h5>
+                        <hr>
+                    </div>
+                    <div class="cost8">
+                        <h2 class="text-red text-center">$7,760</h2>
+                        <h5 class="text-red text-align-right">per year</h5>
+                    </div>
+                </div>
+                <button class="next hidden">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide13" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Nervous about how much this is going to cost, Gabby looks at all of her options.</h2>
+                </div>
+                <img id="gabbyNervous" class="gabby-thinking" src="assets/img/gabby-nervous-about-costs.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide14" type="text/template">
+            <div class="bg-teal">
+                <p class="text-pad2">Tap the clouds to learn more</p>
+                <div id="childSupportThought">
+                    <div class="flip-container">
+                        <div class="front face">
+                            <img src="assets/img/thought-cloud-childsupport.svg">
+                        </div>
+                        <div class="back face">
+                            <img src="assets/img/thought-cloud-child-support-text.svg">
+                        </div>
+                    </div>
+                </div>
+                <div id="getAJobThought">
+                    <div class="flip-container">
+                        <div class="front face">
+                            <img src="assets/img/thought-cloud-getajob.svg">
+                        </div>
+                        <div class="back face">
+                            <img src="assets/img/thought-cloud-getajob-text.svg">
+                        </div>
+                    </div>
+                </div>
+                <div id="parentalSupportThought">
+                    <div class="flip-container">
+                        <div class="front face">
+                            <img src="assets/img/thought-cloud-parentalsupport-notail.svg">
+                        </div>
+                        <div class="back face">
+                            <img src="assets/img/thought-cloud-parentalsupport-text-notail.svg">
+                        </div>
+                    </div>
+                </div>
+                <img id="gabbyConsideringOptions" src="assets/img/gabby-thinking-of-options.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide15" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad">
+                    <h3>Gabby decides to get a job to cover expenses. Even with help from her parents and child support, Gabby will still need extra income.</h3>
+                </div>
+                <img class="bottom-center-small" src="assets/img/get-a-job.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide16" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Gabby's friends decide to throw her a baby shower.</h2>
+                </div>
+                <img id="decorationsBabyShower" class="bottom-center-person-large" src="assets/img/decorations-throw-baby-shower.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide17" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>Gabby is thankful to have support from her friends and family! They give her diapers, toys, clothes, and a car seat!</h3>
+                </div>
+                <img class="bottom-center-medium" src="assets/img/confetti-and-gifts.svg">
+                <img class="bottom-center-person" src="assets/img/gabby-thankful.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide18" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad2">
+                    <h1>Gabby is starting to feel better in her pregnancy.</h1>
+                </div>
+                <button id="video9" class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide19" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>Gabby goes into labor!</h1>
+                </div>
+                <img class="bottom-center-person-large" src="assets/img/gabby-in-labor-withaccentlines.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide20" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Gabby's family and best friends anxiously wait for the new baby's arrival at the hospital.</h2>
+                </div>
+                <div class="clock">
+                    <div class="hours-container">
+                        <div class="hours"></div>
+                    </div>
+                    <div class="minutes-container">
+                        <div class="minutes"></div>
+                    </div>
+                    <div class="seconds-container">
+                        <div class="seconds"></div>
+                    </div>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide21" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad text-center text-pad-top">
+                    <h1>Good news!</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide22" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad2 text-center">
+                    <h1>It's a girl!</h1>
+                </div>
+                <img class="center-person" src="assets/img/baby-girl.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide23" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad2">
+                    <h1>Help Gabby name the baby!</h1>
+                </div>
+                <img class="footprints" src="assets/img/footprints-navy.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide25" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>Gabby brings home baby <span class="baby-name text-red"></span>.</h1>
+                </div>
+                <img class="bottom-center-medium" src="assets/img/gabby-holding-baby-happy.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide26" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>At first, her friends come to visit her and the baby, but eventually they become too busy with summer plans and jobs.</h3>
+                </div>
+                <img class="bottom-cut" src="assets/img/gabby-holding-baby-sad.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide27" type="text/template">
+            <audio autoplay>
+                <source src="assets/sounds/baby-crying.mp3" type="audio/mpeg">
+            </audio>
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>Baby <span class="baby-name text-red"></span> is having a hard time sleeping through the night.</h1>
+                </div>
+                <img class="bottom-center-small" src="assets/img/crying-baby-head.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide28" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>Gabby is so tired and wishes her parents could help more but they both have jobs during the day.</h3>
+                </div>
+                <img class="bottom-cut" src="assets/img/gabby-holding-baby-tired.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide29" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>Do you know how often babies wake up to feed during the night up until around 3 months?</h3>
+                </div>
+                <img class="small-tilted" src="assets/img/bottle.svg">
+                <div class="slider-container">
+                    <p>Slide to guess:</p>
+                    <div class="value">Every Hour</div>
+                    <input type="range" min="1" max="8" step="1" value="1">
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide30" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h3>Though all babies schedules vary slightly, it is recommended that babies eat every 2-3 hours during the first three months.</h3>
+                </div>
+                <div class="clock">
+                    <div class="hours-container">
+                        <div class="hours"></div>
+                    </div>
+                    <div class="minutes-container">
+                        <div class="minutes"></div>
+                    </div>
+                    <div class="seconds-container">
+                        <div class="seconds"></div>
+                    </div>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide31" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>Gabby's Mom offers to babysit on a Saturday so she can go out with her friends.</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide32" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h2>What should Gabby and her friends do for fun?</h2>
+                </div>
+                <div class="three-choice-container">
+                    <img id="shopping" src="assets/img/option-goshopping-nostroke.svg">
+                    <img id="seeMovie" src="assets/img/option-seeamovie-nostroke.svg">
+                    <img id="friendsHouse" src="assets/img/option-friendshouse-nostroke.svg">
+                </div>
+                <button class="next hidden">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide33" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad2">
+                    <h1>It's time for Gabby to go back to school!</h1>
+                </div>
+                <img class="bottom-center-small" src="assets/img/stack-of-books-back-to-school.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide34" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>Gabby is ready to see her friends and get back to a normal routine, but who will keep the baby?</h3>
+                </div>
+                <img class="thought-bubble" src="assets/img/thought-bubble-baby-questions.svg">
+                <img class="bottom-cut-small" src="assets/img/gabby-thinking-of-options.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="explanation_slide2" type="text/template">
+            <div class="bg-orange">
+                <div class="white-container">
+                    <div class="close-container">X Close</div>
+                    <div class="scroll-pad">
+                        <div class="text-pad">
+                            <h2>Daycare:</h2>
+                            <p>
+                                Daycare would give Gabby the option to
+                                go to class with her friends but it is expensive.
+                                She will need to keep her part time job
+                                after school. If Gabby keeps her job afer school
+                                she won't have much time to spend with
+                                baby <span class="baby-name"></span>, her friends,
+                                or family. Gabby is worried she won't
+                                be able to balance everything.
+                            </p>
+                            <hr />
+                            <h2>Take the GED:</h2>
+                            <p>
+                                Gabby could take the GED instead of
+                                finishing out the school year with her friends.
+                                Taking the GED would require a lot of
+                                studying, but she might have more time to
+                                work, spend time with baby
+                                <span class="baby-name"></span>, and
+                                begin focusing on her future. Gabby is
+                                worried about not seeing her friends every
+                                day.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+        <script id="daycare_1" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad">
+                    <h1>Gabby decides to send baby <span class="baby-name text-dark-green"></span>
+                        to daycare so she can finish out the school year.</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="daycare_2" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Gabby is excited to see her friends every day at school.</h2>
+                </div>
+                <img class="bottom-center-person" src="assets/img/gabby-holding-books.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="daycare_3" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>Gabby keeps her part time job. Her parents offer to help her
+                        with <span class="baby-name text-red"></span>.</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="daycare_4" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>She doesn't have much free time, but she makes it work.</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="daycare_5" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Due to all of her hard work, Gabby is able to graduate on time!</h2>
+                </div>
+                <img class="bottom-center-person" src="assets/img/gabby-graduation-wave.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="ged_1" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad">
+                    <h1>Gabby decides taking the GED would be the best decision
+                        for her and baby <span class="baby-name text-dark-green"></span>.</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="ged_2" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Gabby studies during the day while the baby is sleeping.</h2>
+                </div>
+                <img class="bottom-center-person" src="assets/img/gabby-holding-books.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="ged_3" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>Her parents offer to watch <span class="baby-name text-red"></span> at night.</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="ged_4" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>Gabby is able to take on more hours at her job.</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="ged_5" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Gabby gets a raise at work and passes the GED!</h2>
+                </div>
+                <img class="bottom-center-person" src="assets/img/gabby-smile-withconfetti.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide36" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad2">
+                    <h1>Baby <span class="baby-name text-red"></span> takes her first steps!</h1>
+                </div>
+                <img class="bottom-center-person" src="assets/img/toddler-smile.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide37" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad2">
+                    <h2>Gabby celebrates <span class="baby-name text-red"></span> first birthday!</h2>
+                </div>
+                <img class="bottom-center-medium" src="assets/img/gabby-toddler-celebrate-confetti.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide38" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Now that Gabby is done with school she needs to start thinking about their future.</h2>
+                </div>
+                <img class="bottom-center-person" src="assets/img/gabby-toddler-holding-hands-smile.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide39" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad2 text-center">
+                    <p>Think about what dreams and goals Gabby might have for herself and her daughter.</p>
+                </div>
+                <div class="white-container container-small">
+                    <div class="scroll-pad">
+                        <div class="text-pad">
+                            <textarea placeholder="Type your thoughts..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <button class="next">Submit</button>
+            </div>
+        </script>
+        <script id="job_slide1" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad">
+                    <h1>Gabby decides working full time is the best option for her and her daughter right now.</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="job_slide2" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Luckily, her current part time job allows her to switch to full time.</h2>
+                </div>
+                <img class="bottom-cut" src="assets/img/gabby-nametag.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="job_slide3" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>In a few years when baby <span class="baby-name text-red"></span> is older,
+                        Gabby wants to go back to school.</h3>
+                </div>
+                <div class="thought-bubble-container">
+                    <img class="thought" src="assets/img/thought-college.svg">
+                    <img class="gabby-thought" src="assets/img/gabby-thinking.svg">
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="college_slide1" type="text/template">
+            <div class="bg-red">
+                <div class="text-pad">
+                    <h1>Gabby decides to research her options for going to college full time.</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="college_slide2" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>After looking into night school, Gabby decides she doesn't have the resources
+                        to juggle night school, work, and baby <span class="baby-name text-red"></span>.</h3>
+                </div>
+                <img class="bottom-cut" src="assets/img/gabby-sad-nightschool.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="college_slide3" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>In a few years when baby <span class="baby-name text-red"></span>
+                        is older, Gabby wants to go back to school.</h3>
+                </div>
+                <div class="thought-bubble-container">
+                    <img class="thought" src="assets/img/thought-college.svg">
+                    <img class="gabby-thought" src="assets/img/gabby-thinking.svg">
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide41" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Gabby makes friends with another single Mom at work.</h2>
+                </div>
+                <img class="bottom-center-person" src="assets/img/gabby-and-single-mom.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide42" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>They go on a play date at the park.</h1>
+                </div>
+                <img class="bottom-center-medium playground" src="assets/img/playground.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide43" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>Gabby enjoys spending time with someone who knows the joys and struggles of Motherhood.</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide44" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>Gabby gets a promotion at work that comes with a raise! She finally has some extra money left over.</h3>
+                    <p>What should she do with the extra money?</p>
+                </div>
+                <img id="raise" class="bottom-center-small" src="assets/img/gets-a-raise.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide45" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h2>Help Gabby choose what to do with her extra money:</h2>
+                </div>
+                <div class="four-choice-container">
+                    <img id="moveOut" src="assets/img/option-moveout-blank.svg">
+                    <img id="dayCare" src="assets/img/option-betterdaycare-blank.svg">
+                    <img id="shoppingSpree" src="assets/img/option-shopping-blank.svg">
+                    <img id="vacation" src="assets/img/option-vacation-blank.svg">
+                </div>
+                <button class="next hidden">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide46" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1><span class="baby-name text-red"></span> is old enough to start pre-k!</h1>
+                </div>
+                <img class="bottom-center-person" src="assets/img/toddler-backpack.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide47" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>Gabby has some flexibility in her day!</h1>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide48" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Gabby could take on more hours at her current job but there really isn't any room for growth.</h2>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide49" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h2>Gabby decides to start class for her college degree.</h2>
+                </div>
+                <div class="thought-bubble-container">
+                    <img class="thought" src="assets/img/thought-college.svg">
+                    <img class="gabby-thought" src="assets/img/gabby-thinking.svg">
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide50" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h2>Help Gabby choose which degree path to take:</h2>
+                </div>
+                <div class="four-choice-container">
+                    <img id="nursing" src="assets/img/option-nursing-medical-blank.svg">
+                    <img id="education" src="assets/img/option-education-blank.svg">
+                    <img id="engineering" src="assets/img/option-engineering-blank.svg">
+                    <img id="socialWorker" src="assets/img/option-social-worker-blank.svg">
+                </div>
+                <button class="next hidden">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide52" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h3>Oh no! <span class="baby-name text-red"></span> falls down on the playground at school.</h3>
+                </div>
+                <img class="bottom-center-medium playground" src="assets/img/playground.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide53" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1>Gabby takes her to the emergency room.</h1>
+                </div>
+                <img class="stethoscope" src="assets/img/stethoscope.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide54" type="text/template">
+            <div class="bg-teal">
+                <div class="text-pad">
+                    <h1><span class="baby-name text-red"></span> broke her arm.</h1>
+                </div>
+                <img class="bottom-center-person" src="assets/img/toddler-brokenarm.svg">
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide55" type="text/template">
+            <div class="bg-orange">
+                <div class="text-pad">
+                    <h2>Unfortunately because of the cost, Gabby will have to cancel the girl's trip she planned with her friend from work.</h2>
+                </div>
+                <button class="next">Next</button>
+            </div>
+        </script>
+        <script id="parenting_slide56" type="text/template">
+            <div class="bg-orange">
+                <audio>
+                    <source src="assets/sounds/ka-ching.mp3" type="audio/mpeg">
+                </audio>
+                <img class="receipt" src="assets/img/receipt-blank.svg">
+                <div class="receipt-text-container">
+                    <h2 class="text-center text-dark-green">Bill</h2>
+                    <br>
+                    <div class="cost1">
+                        <h5>XRay <span class="text-red text-align-right">200</span></h5>
+                        <hr>
+                    </div>
+                    <div class="cost2">
+                        <h5>Arm Splint <span class="text-red text-align-right">250</span></h5>
+                        <hr>
+                    </div>
+                    <div class="cost3">
+                        <h5>Hard Cast <span class="text-red text-align-right">240</span></h5>
+                        <hr>
+                    </div>
+                    <div class="cost4">
+                        <h5>ER Fee <span class="text-red text-align-right">600</span></h5>
+                        <hr>
+                    </div>
+                    <div class="cost5">
+                        <h5>Doctor Fee <span class="text-red text-align-right">750</span></h5>
+                        <hr>
+                    </div>
+                    <div class="cost6">
+                        <h5>Medication <span class="text-red text-align-right">110</span></h5>
+                        <hr>
+                    </div>
+                    <div class="cost7">
+                        <h1 class="text-red text-center">$2,150</h1>
+                        <h4 class="text-red text-align-right">with insurance</h4>
+                    </div>
+                </div>
+                <button class="next hidden">Next</button>
+            </div>
+        </script>
+        <script id="confetti_explosion" type="text/template">
+            <audio autoplay>
+                <source src="assets/sounds/Party-horn.mp3" type="audio/mpeg">
+            </audio>
+            <div id="confettiOverlay">
+                <div id="conf1Container" class="confetti-container">
+                    <img id="conf1" class="confetti rotate" src="assets/img/confetti-streamer1.svg">
+                </div>
+                <div id="conf2Container" class="confetti-container">
+                    <img id="conf2" class="confetti rotate-cc" src="assets/img/confetti-streamer2.svg">
+                </div>
+                <div id="conf3Container" class="confetti-container">
+                    <img id="conf3" class="confetti rotate-cc" src="assets/img/confetti-streamer1.svg">
+                </div>
+                <div id="conf4Container" class="confetti-container-small">
+                    <img id="conf4" class="confetti rotate" src="assets/img/confetti-x.svg">
+                </div>
+                <div id="conf5Container" class="confetti-container-small">
+                    <img id="conf5" class="confetti" src="assets/img/confetti-o.svg">
+                </div>
+                <div id="conf6Container" class="confetti-container-small">
+                    <img id="conf6" class="confetti" src="assets/img/confetti-o.svg">
+                </div>
+                <div id="conf7Container" class="confetti-container-small">
+                    <img id="conf7" class="confetti rotate" src="assets/img/confetti-x.svg">
+                </div>
+                <div id="conf8Container" class="confetti-container">
+                    <img id="conf8" class="confetti rotate" src="assets/img/confetti-streamer1.svg">
+                </div>
+                <div id="conf9Container" class="confetti-container">
+                    <img id="conf9" class="confetti rotate-cc" src="assets/img/confetti-streamer2.svg">
+                </div>
+                <div id="conf10Container" class="confetti-container">
+                    <img id="conf10" class="confetti rotate-cc" src="assets/img/confetti-streamer1.svg">
+                </div>
+                <div id="conf11Container" class="confetti-container-small">
+                    <img id="conf11" class="confetti rotate-cc" src="assets/img/confetti-x.svg">
+                </div>
+                <div id="conf12Container" class="confetti-container-small">
+                    <img id="conf12" class="confetti" src="assets/img/confetti-o.svg">
+                </div>
+                <div id="conf13Container" class="confetti-container-small">
+                    <img id="conf13" class="confetti" src="assets/img/confetti-o.svg">
+                </div>
+                <div id="conf14Container" class="confetti-container-small">
+                    <img id="conf14" class="confetti rotate" src="assets/img/confetti-x.svg">
+                </div>
+            </div>
+        </script>
+        <script id="pdf_container" type="text/template">
+            <h1>Hello</h1>
+            <p>How are you?</p>
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
+

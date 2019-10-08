@@ -1,0 +1,17 @@
+# Ignore everything
+/*
+**/.DS_Store
+**/.npmignore
+.idea/*
+/.idea
+
+# But not these files...
+!.gitignore
+!www/
+!/www/*
+!/www
+
+#Buuutttt ignore these
+www/assets
+www/js/lib
+www/css/lib
